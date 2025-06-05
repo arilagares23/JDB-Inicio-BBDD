@@ -6,14 +6,18 @@ public class Paso1 {
         String url= "jdbc:postgresql://127.0.0.1:5432/jardineria";
         String user= "paisajista";
         String clave= "43135650Ari";
+        // Creamos los recursos necesarios pra ejecutar fuera del try -catch y q esten disponible para todo el bloque
+        Connection conex = null;
+        Statement st = null;
+        ResultSet rs = null;
         // Creamos la instancia de la conexion a la BBDD
         try{
             //Creamos la instancia de la conexion a la BBDD
-            Connection conex = DriverManager.getConnection(url,user,clave);
+            conex = DriverManager.getConnection(url,user,clave);
             //Creamos una instancia de sentencia para poder enviar consultas al servidor BBDD
-            Statement st = conex.createStatement();
+            st = conex.createStatement();
             //Definios la consulta, la enviamos al servidor (ejecutamos la sentecia) y obtenemos el resultado
-            ResultSet rs = st.executeQuery(conex.nativeSQL("SELECT * FROM cliente"));
+            rs = st.executeQuery(conex.nativeSQL("SELECT * FROM cliente"));
 
             //En el ResultSet tenemos todos los registros devueltos por el servidor ddentro de un iterador
             while (rs.next()) {
@@ -26,9 +30,9 @@ public class Paso1 {
             throw new RuntimeException(e);
         } finally {
             //Al utilizar finally nos aseguramos que los recursos se cierran aunque el try falle
-            //rs.close();
-            //st.close();
-            //conex.close();
+            rs.close();
+            st.close();
+            conex.close();
         }
 
     }
